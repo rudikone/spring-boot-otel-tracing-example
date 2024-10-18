@@ -1,0 +1,20 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/key"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "key": "3ebb6e53-be9e-44ed-a95d-184f559d2f4d"
+        }
+      }
+    }
+  }
+]
