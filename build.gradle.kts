@@ -29,10 +29,10 @@ dependencies {
 	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-logging")
-	implementation("org.springframework.boot:spring-boot-starter-webflux") // web client
+	// web client
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -42,9 +42,14 @@ dependencies {
 
 	runtimeOnly("org.postgresql:postgresql")
 
+	// Поскольку Micrometer Tracer поддерживает несколько реализаций tracer, возможно несколько комбинаций зависимостей
+	// однако всем нужен spring-boot-starter-actuator
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	// https://docs.spring.io/spring-boot/reference/actuator/tracing.html#actuator.micrometer-tracing.tracer-implementations.otel-otlp
 	implementation("io.micrometer:micrometer-tracing-bridge-otel")
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
-	implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.5") // для трассировки SQL запросов
+	// для трассировки SQL запросов
+	implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.5")
 }
 
 kotlin {

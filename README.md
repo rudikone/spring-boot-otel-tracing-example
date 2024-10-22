@@ -1,5 +1,7 @@
 # Spring Boot OpenTelemetry example
 
+[Документация](https://docs.spring.io/spring-boot/reference/actuator/tracing.html) 
+
 **Проект использует плагины:**
 
 - kotlin("jvm") version "1.9.23"
