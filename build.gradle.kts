@@ -42,7 +42,7 @@ dependencies {
 
 	runtimeOnly("org.postgresql:postgresql")
 
-	// Поскольку Micrometer Tracer поддерживает несколько реализаций tracer, возможно несколько комбинаций зависимостей
+	// Поскольку Micrometer поддерживает несколько реализаций tracer, возможно несколько комбинаций зависимостей
 	// однако всем нужен spring-boot-starter-actuator
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	// https://docs.spring.io/spring-boot/reference/actuator/tracing.html#actuator.micrometer-tracing.tracer-implementations.otel-otlp
