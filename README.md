@@ -1,7 +1,7 @@
 # Spring Boot OpenTelemetry example
 
 <p style="text-align:center;">
-  <img src="img.png" width="65%"/>
+  <img src="img.png" width="85%"/>
 </p>
 
 Пример использования трейсинга [OpenTelemetry](https://opentelemetry.io/docs/concepts/signals/traces/) в Spring Boot приложении.
