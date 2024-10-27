@@ -40,6 +40,7 @@
 5. Перейти на [jaeger ui](http://localhost:16686/), проверить трейсы
 
 **Примечание**
+
 По умолчанию используется протокол HTTP для коллектора (см. https://github.com/ThomasVitale/spring-boot-opentelemetry?tab=readme-ov-file). Чтобы реализовать выгрузку по gRPC, необходимо 
 сконфигурировать:
 
