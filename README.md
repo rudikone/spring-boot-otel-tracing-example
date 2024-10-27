@@ -38,3 +38,16 @@
    **_traceparent_** header (пример 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01) или
    **_b3_** header (пример 4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-1) в сообщение
 5. Перейти на [jaeger ui](http://localhost:16686/), проверить трейсы
+
+**Примечание**
+По умолчанию используется протокол HTTP для коллектора (см. https://github.com/ThomasVitale/spring-boot-opentelemetry?tab=readme-ov-file). Чтобы реализовать выгрузку по gRPC, необходимо 
+сконфигурировать:
+
+```java
+  @Bean
+  OtlpGrpcSpanExporter otlpGrpcSpanExporter() {
+  return OtlpGrpcSpanExporter.builder()
+  .setEndpoint(otlpProperties.getCollectorUrl())
+  .build();
+  }
+```
