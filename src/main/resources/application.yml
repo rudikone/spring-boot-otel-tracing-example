@@ -12,46 +12,28 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.value.default.type: ru.rudikov.springboototeltracingexample.adapter.model.MyRequest
         spring.json.trusted.packages: ru.rudikov.springboototeltracingexample
-    listener:
-      observation-enabled: true
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     template:
       default-topic: response-topic
-      observation-enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/otel
     username: rudikone
     password: mypassword
     driver-class-name: org.postgresql.Driver
-
-springwolf:
-  docket:
-    base-package: ru.rudikov.springboototeltracingexample.adapter.primary
-    info:
-      title: ${spring.application.name}
-      version: 1.0.0
-    servers:
-      kafka-server:
-        protocol: kafka
-        host: ${spring.kafka.bootstrap-servers}
-  plugin:
-    kafka:
-      publishing:
-        enabled: true
-        producer:
-          bootstrap-servers: ${spring.kafka.bootstrap-servers}
-          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-management:
-  tracing:
-    sampling:
+  sleuth:
+    otel:
+      exporter:
+        otlp:
+          # url коллектора трейсов
+          # в связке sleuth-otel экспортер использует grpc по умолчанию. в jaeger - 4317 порт для grpc коллектора
+          endpoint: http://localhost:4317/v1/traces
+          enabled: true
+    sampler:
       probability: 1.0
-    enabled: true
-  otlp:
-    tracing:
-      endpoint: http://localhost:4318/v1/traces
-
+    propagation:
+      # работает только то, что стоит на 1 месте
+      type: w3c, b3
 
 
 

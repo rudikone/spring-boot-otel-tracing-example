@@ -1,25 +1,30 @@
 package ru.rudikov.springboototeltracingexample.adapter.primary
 
+import mu.KotlinLogging
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import ru.rudikov.springboototeltracingexample.adapter.model.EncryptResult
-import mu.KotlinLogging
 
 @Component
 class Producer(private val kafkaTemplate: KafkaTemplate<String, EncryptResult>) {
 
     fun sendMessage(key: String, encryptResult: EncryptResult) {
-        kafkaTemplate.sendDefault(key, encryptResult).whenComplete { result, ex ->
-            if (ex == null) {
+        kafkaTemplate.sendDefault(key, encryptResult).addCallback(
+            /* successCallback = */ { result ->
+                val topic = result?.recordMetadata?.topic()
+
                 logger.info {
-                    "Сообщение с id=${encryptResult.fakeId} успешно отправлено: topic=${result.recordMetadata.topic()}"
+                    """
+                        Сообщение с id=${encryptResult.fakeId} успешно отправлено: topic=${topic}
+                    """.trimIndent()
                 }
-            } else {
+            },
+            /* failureCallback = */ { ex ->
                 logger.error {
                     "Ошибка при отправке сообщения: ${ex.message}"
                 }
             }
-        }
+        )
     }
 
     companion object {
