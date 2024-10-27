@@ -16,11 +16,12 @@
 - spring-cloud-starter-sleuth version 3.1.11
 - spring-cloud-sleuth-otel-autoconfigure version 1.1.4
 - io.opentelemetry:opentelemetry-exporter-otlp version 1.24.0
+- p6spy:p6spy version 3.9.1
 
 **Описание:**
 Демонстрационный проект, читает сообщение с текстом пользователя из топика [request-topic](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/primary/Consumer.kt),
 запрашивает ключ шифрования через http запрос к [http://localhost:1080/key](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/secondary/KeyAdapter.kt),
-шифрует текст пользователя, [сохраняет](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/secondary/MessageDetailsAdapter.kt)артефакты в БД и отправляет ответ в [response-topic](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/primary/Producer.kt).
+шифрует текст пользователя, [сохраняет](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/secondary/MessageDetailsAdapter.kt) артефакты в БД и отправляет ответ в [response-topic](src/main/kotlin/ru/rudikov/springboototeltracingexample/adapter/primary/Producer.kt).
 
 **Use case:**
 1. Для запуска необходимой инфраструктуры выполни docker-compose up см. [docker-compose](docker-compose.yml)

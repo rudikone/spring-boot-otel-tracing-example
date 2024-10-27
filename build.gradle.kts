@@ -47,6 +47,9 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure:1.1.4")
 	// с более новыми версиями не работает
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp:1.24.0")
+	// для трассировки обращений к БД
+	// https://docs.spring.io/spring-cloud-sleuth/docs/3.1.0/reference/html/integrations.html#sleuth-jdbc-integration
+	implementation("p6spy:p6spy:3.9.1")
 }
 
 kotlin {

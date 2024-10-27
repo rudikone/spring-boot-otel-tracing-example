@@ -17,10 +17,12 @@ spring:
     template:
       default-topic: response-topic
   datasource:
-    url: jdbc:postgresql://localhost:5432/otel
+    # https://p6spy.readthedocs.io/en/latest/integration.html#connection-url-way
+    url: jdbc:p6spy:postgresql://localhost:5432/otel
     username: rudikone
     password: mypassword
-    driver-class-name: org.postgresql.Driver
+    # https://p6spy.readthedocs.io/en/latest/install.html?highlight=p6spydriver#p6spy-installation
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
   sleuth:
     otel:
       exporter:
@@ -34,6 +36,6 @@ spring:
     propagation:
       # работает только то, что стоит на 1 месте
       type: w3c, b3
-
-
-
+    jdbc:
+      p6spy:
+        enabled: true
