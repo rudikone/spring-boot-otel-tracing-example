@@ -50,6 +50,11 @@ management:
     enabled: true
   otlp:
     tracing:
+      # в классе org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpAutoConfiguration версии 3.3.4
+      # By default, we auto-configure HTTP/protobuf. If you want to use gRPC, you need to set
+      # {@code management.otlp.tracing.transport=grpc}. If you define a
+      # {@link OtlpHttpSpanExporter} or {@link OtlpGrpcSpanExporter}, this auto-configuration
+      # will back off.
       endpoint: http://localhost:4318/v1/traces
 
 
