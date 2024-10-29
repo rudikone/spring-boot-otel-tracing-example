@@ -45,9 +45,9 @@ springwolf:
 
 management:
   tracing:
-    sampling:
-      probability: 1.0
-    enabled: true
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
   otlp:
     tracing:
       # в классе org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpAutoConfiguration версии 3.3.4
