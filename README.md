@@ -50,4 +50,4 @@ OpenTelemetry отправляет собранные данные в любой
 - https://reflectoring.io/spring-boot-tracing/
 - https://piotrminkowski.com/2023/11/15/kafka-tracing-with-spring-boot-and-open-telemetry/
 - https://github.com/ThomasVitale/spring-boot-opentelemetry
-
+- https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation
