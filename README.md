@@ -75,6 +75,78 @@
       - не поддерживается propagation type w3c и b3 одновременно
 4. Перейти на [jaeger ui](http://localhost:16686/), проверить трейсы
 
+# Найденный баг
+
+[OtelAutoConfiguration](https://github.com/spring-projects-experimental/spring-cloud-sleuth-otel/blob/main/spring-cloud-sleuth-otel-autoconfigure/src/main/java/org/springframework/cloud/sleuth/autoconfig/otel/OtelAutoConfiguration.java)
+
+```java
+@Bean 
+@ConditionalOnClass(name = "io.opentelemetry.api.metrics.GlobalMeterProvider") 
+@ConditionalOnMissingBean 
+SpanProcessorProvider otelBatchSpanProcessorProvider(OtelProcessorProperties otelProcessorProperties) { 
+    return new SpanProcessorProvider() { 
+       @Override 
+       public SpanProcessor toSpanProcessor(SpanExporter spanExporter) { 
+          BatchSpanProcessorBuilder builder = BatchSpanProcessor.builder(spanExporter); 
+          setBuilderProperties(otelProcessorProperties, builder); 
+          return builder.build(); 
+       } 
+   
+       private void setBuilderProperties(OtelProcessorProperties otelProcessorProperties, 
+             BatchSpanProcessorBuilder builder) { 
+          if (otelProcessorProperties.getBatch().getExporterTimeout() != null) { 
+             builder.setExporterTimeout(otelProcessorProperties.getBatch().getExporterTimeout(), 
+                   TimeUnit.MILLISECONDS); 
+          } 
+          if (otelProcessorProperties.getBatch().getMaxExportBatchSize() != null) { 
+             builder.setMaxExportBatchSize(otelProcessorProperties.getBatch().getMaxExportBatchSize()); 
+          } 
+          if (otelProcessorProperties.getBatch().getMaxQueueSize() != null) { 
+             builder.setMaxQueueSize(otelProcessorProperties.getBatch().getMaxQueueSize()); 
+          } 
+          if (otelProcessorProperties.getBatch().getScheduleDelay() != null) { 
+             builder.setScheduleDelay(otelProcessorProperties.getBatch().getScheduleDelay(), 
+                   TimeUnit.MILLISECONDS); 
+          } 
+       } 
+    }; 
+} 
+   
+@Bean 
+@ConditionalOnMissingClass("io.opentelemetry.api.metrics.GlobalMeterProvider") 
+@ConditionalOnMissingBean 
+SpanProcessorProvider otelSimpleSpanProcessorProvider() { 
+    return SimpleSpanProcessor::create; 
+}
+```
+
+Оба бина имеют зависимость на то, чтобы на classpath лежал GlobalMeterProvider, если перейти в него и посмотреть его javadoc, то можно будет увидеть, что в описании к классу сказано:
+
+_**This class is a temporary solution until metrics SDK is marked stable.**_
+
+С версии [v1.10.0-rc.2](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.10.0-rc.2) класс GlobalMeterProvider удален.
+
+В javadoc к SimpleSpanProcessor указано, что настоятельно рекомендуется использовать BatchSpanProcessor:
+
+```java
+* Returns a new {@link SimpleSpanProcessor} which exports spans to the {@link SpanExporter}
+* synchronously.
+*
+* <p>This processor will cause all spans to be exported directly as they finish, meaning each  
+* export request will have a single span. Most backends will not perform well with a single span
+* per request so unless you know what you're doing, strongly consider using {@link
+* BatchSpanProcessor} instead, including in special environments such as serverless runtimes.
+* {@link SimpleSpanProcessor} is generally meant to for logging exporters only.
+```
+
+Если положить на classpath пустой класс io.opentelemetry.api.metrics.GlobalMeterProvider, то будет создан BatchSpanProcessor.
+
+Узкое место в SimpleSpanProcessor - это okhttp3 клиент, через который по grpc отливаются спаны
+
+Внутри него есть очередь, через которую общаются потоки приложения и фоновый тредпул okhttp3, работающий с TCP сокетами - https://github.com/square/okhttp/blob/parent-4.11.0/okhttp/src/main/kotlin/okhttp3/Dispatcher.kt#L102
+
+Это обычная ArrayDeque, поэтому все обращения к ней идут в synchronized секциях. И эти секции становятся узким местом в достаточно нагруженном приложении. Начинают тормозить все места, где есть вызовы endSpan. Т.е. практически везде
+
 
 
 
