@@ -46,6 +46,7 @@ OpenTelemetry отправляет собранные данные в любой
 
 ## Полезные ссылки
 
+- https://habr.com/ru/companies/oleg-bunin/articles/865690/
 - https://edgedelta.com/company/blog/what-is-opentelemetry-tracing
 - https://reflectoring.io/spring-boot-tracing/
 - https://piotrminkowski.com/2023/11/15/kafka-tracing-with-spring-boot-and-open-telemetry/
