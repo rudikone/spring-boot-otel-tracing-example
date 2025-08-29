@@ -34,7 +34,6 @@ spring:
     sampler:
       probability: 1.0
     propagation:
-      # на consume работает только то, что стоит на 1 месте, в доке не нашел объяснения
       type: [w3c, b3]
     jdbc:
       p6spy:

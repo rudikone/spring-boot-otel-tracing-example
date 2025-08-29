@@ -72,7 +72,6 @@
    ```
    **_ВНИМАНИЕ_**: 
       - value header необходимо закодировать с помощью [base64](https://www.base64encode.org/) - ограничение confluent kafka-rest
-      - не поддерживается propagation type w3c и b3 одновременно
 4. Перейти на [jaeger ui](http://localhost:16686/), проверить трейсы
 
 # Найденный баг
